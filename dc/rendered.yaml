@@ -1,0 +1,74 @@
+apiVersion: v1
+data:
+  config.yaml: YXBpU2VydmVyOgogIGFkZHJlc3M6IDo4MDgwCiAgZW5hYmxlUmV2ZXJzZUluZGV4OiB0cnVlCiAgZW5hYmxlU2VhcmNoSW5kZXg6IHRydWUKY2x1c3Rlck5hbWU6IHVuaWNvcm4KZW5hYmxlQ29uZmlnU3luY2VyOiB0cnVl
+kind: Secret
+metadata:
+  labels:
+    app: kubed
+    release: kubed
+  name: kubed-kubed
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: kubed
+    release: kubed
+  name: kubed-kubed
+spec:
+  ports:
+  - name: api
+    port: 8080
+    protocol: TCP
+    targetPort: api
+  - name: web
+    port: 56790
+    protocol: TCP
+    targetPort: web
+  selector:
+    app: kubed
+    release: kubed
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  labels:
+    app: kubed
+    release: kubed
+  name: kubed-kubed
+spec:
+  replicas: 3
+  template:
+    metadata:
+      labels:
+        app: kubed
+        release: kubed
+    spec:
+      containers:
+      - args:
+        - run
+        - --v=3
+        - --api.address=:8080
+        - --web.address=:56790
+        image: appscode/kubed:0.4.0
+        imagePullPolicy: IfNotPresent
+        name: kubed
+        ports:
+        - containerPort: 8080
+          name: api
+          protocol: TCP
+        - containerPort: 56790
+          name: web
+          protocol: TCP
+        volumeMounts:
+        - mountPath: /srv/kubed
+          name: config
+        - mountPath: /tmp
+          name: scratch
+      serviceAccountName: default
+      volumes:
+      - name: config
+        secret:
+          secretName: kubed-kubed
+      - emptyDir: {}
+        name: scratch
