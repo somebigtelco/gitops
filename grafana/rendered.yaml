@@ -140,7 +140,7 @@ metadata:
     release: grafana
   name: grafana
 spec:
-  replicas: 2
+  replicas: 4
   selector:
     matchLabels:
       app: grafana
@@ -168,7 +168,7 @@ spec:
         image: grafana/grafana:6.1.3
         imagePullPolicy: IfNotPresent
         livenessProbe:
-          failureThreshold: 10
+          failureThreshold: 19
           httpGet:
             path: /api/health
             port: 3000
