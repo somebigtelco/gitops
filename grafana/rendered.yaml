@@ -140,7 +140,7 @@ metadata:
     release: grafana
   name: grafana
 spec:
-  replicas: 4
+  replicas: 45
   selector:
     matchLabels:
       app: grafana
@@ -172,7 +172,7 @@ spec:
           httpGet:
             path: /api/health
             port: 3000
-          initialDelaySeconds: 60
+          initialDelaySeconds: 600
           timeoutSeconds: 30
         name: grafana
         ports:
