@@ -138,9 +138,10 @@ metadata:
   labels:
     app: grafana
     release: grafana
+    vendor: kots
   name: grafana
 spec:
-  replicas: 2
+  replicas: 45
   selector:
     matchLabels:
       app: grafana
@@ -168,11 +169,11 @@ spec:
         image: grafana/grafana:6.1.3
         imagePullPolicy: IfNotPresent
         livenessProbe:
-          failureThreshold: 10
+          failureThreshold: 19
           httpGet:
             path: /api/health
             port: 3000
-          initialDelaySeconds: 60
+          initialDelaySeconds: 600
           timeoutSeconds: 30
         name: grafana
         ports:
