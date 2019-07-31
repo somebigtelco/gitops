@@ -138,9 +138,10 @@ metadata:
   labels:
     app: grafana
     release: grafana
+    vendor: happy
   name: grafana
 spec:
-  replicas: 2
+  replicas: 4
   selector:
     matchLabels:
       app: grafana
@@ -168,12 +169,12 @@ spec:
         image: grafana/grafana:6.1.3
         imagePullPolicy: IfNotPresent
         livenessProbe:
-          failureThreshold: 10
+          failureThreshold: 90
           httpGet:
             path: /api/health
             port: 3000
-          initialDelaySeconds: 60
-          timeoutSeconds: 30
+          initialDelaySeconds: 600
+          timeoutSeconds: 302
         name: grafana
         ports:
         - containerPort: 80
